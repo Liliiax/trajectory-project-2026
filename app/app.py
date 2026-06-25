@@ -13,7 +13,7 @@ h1 { text-align: center; }
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header { visibility: hidden; }
-</style>""", unsafe_allow_html=True) # нагптшила чтобы спрятать ненужные рабочие иконки стримлита и покрасивее сделать 
+</style>""", unsafe_allow_html=True) # чтобы спрятать ненужные рабочие иконки стримлита и покрасивее сделать 
 
 col1, col2, col3 = st.columns([2, 1, 2])
 with col2: st.image("hse_logo.png", width=1990) # по приколу, можно удалить/поменять
@@ -216,7 +216,7 @@ if st.session_state.step == 2:
     st.markdown("---")
     st.subheader(f"Данные по дисциплине: {discipline}")
 
-    st.write("### Первый модуль")
+    st.subheader("Первый модуль")
     # тут тоже мб можно описание какое-то добавить что пользователю надо сделать вообще 
 
     module_1 = st.number_input("Номер учебного модуля", min_value=1, step=1, key='module1')
@@ -231,7 +231,7 @@ if st.session_state.step == 2:
 
     if st.session_state.show_second_module:
         st.markdown("---")
-        st.write("### Второй модуль")
+        st.subheader("Второй модуль")
         module_2 = st.number_input("Номер учебного модуля", min_value=1, step=1, key='module2')
         grade_2 = st.slider("Оценка за предмет", min_value=0, max_value=10, value=5,  key='grade2')
         difficulty_2 = st.number_input("Оцените сложность предмета в данном модуле", min_value=0.0, max_value=5.0, step=0.5,  key='diff2')
