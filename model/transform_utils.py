@@ -40,7 +40,7 @@ class LightGBM_model:
         self.exam_encoder.fit(['Первая сдача', 'Пересдача по уважительной причине', 'Пересдача', 'Пересдача с комиссией'])
         data['exam_type'] = self.exam_encoder.transform(data['exam_type'])
         data['exam_type_prev'] = self.exam_encoder.transform(data['exam_type_prev'])
-        data['target_type'] = self.exam_encoder.transform(data['target_type'])
+        #data['target_type'] = self.exam_encoder.transform(data['target_type'])
 
         self.absence_encoder.fit(['valid', 'invalid', '\\N'])
         data['absence_status'] = self.absence_encoder.transform(data['absence_status'])
@@ -61,7 +61,7 @@ class LightGBM_model:
         data['education_level'] = self.education_encoder.transform(data['education_level'])
         data['exam_type'] = self.exam_encoder.transform(data['exam_type'])
         data['exam_type_prev'] = self.exam_encoder.transform(data['exam_type_prev'])
-        data['target_type'] = self.exam_encoder.transform(data['target_type'])
+        # data['target_type'] = self.exam_encoder.transform(data['target_type'])
         data['absence_status'] = self.absence_encoder.transform(data['absence_status'])
         data['discipline'] = self.disc_encoder.transform(data[['discipline']])
         data['program'] = self.program_encoder.transform(data[['program']])    
