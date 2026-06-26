@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder, TargetEncoder, O
 import warnings
 from sklearn.metrics import f1_score
 for warn in [UserWarning, FutureWarning, RuntimeWarning]: warnings.filterwarnings("ignore", category = warn)
- 
+from params import FEATURES
     
 class LightGBM_model: 
     
@@ -28,7 +28,7 @@ class LightGBM_model:
         self.type_model = LGBMClassifier( n_estimators=n_estimators,max_depth=max_depth,
                                           learning_rate=learning_rate, num_leaves=num_leaves,
                                            bagging_fraction=bagging_fraction, min_child_samples=min_child_samples, feature_fraction=feature_fraction, random_state=42, verbose=-1)
-        self.X_columns = None
+        self.X_columns = FEATURES
 
     def fit_transform_data(self, data):
 
@@ -40,7 +40,7 @@ class LightGBM_model:
         self.exam_encoder.fit(['Первая сдача', 'Пересдача по уважительной причине', 'Пересдача', 'Пересдача с комиссией'])
         data['exam_type'] = self.exam_encoder.transform(data['exam_type'])
         data['exam_type_prev'] = self.exam_encoder.transform(data['exam_type_prev'])
-        #data['target_type'] = self.exam_encoder.transform(data['target_type'])
+        data['target_type'] = self.exam_encoder.transform(data['target_type'])
 
         self.absence_encoder.fit(['valid', 'invalid', '\\N'])
         data['absence_status'] = self.absence_encoder.transform(data['absence_status'])
@@ -61,7 +61,6 @@ class LightGBM_model:
         data['education_level'] = self.education_encoder.transform(data['education_level'])
         data['exam_type'] = self.exam_encoder.transform(data['exam_type'])
         data['exam_type_prev'] = self.exam_encoder.transform(data['exam_type_prev'])
-        # data['target_type'] = self.exam_encoder.transform(data['target_type'])
         data['absence_status'] = self.absence_encoder.transform(data['absence_status'])
         data['discipline'] = self.disc_encoder.transform(data[['discipline']])
         data['program'] = self.program_encoder.transform(data[['program']])    
@@ -69,13 +68,11 @@ class LightGBM_model:
 
         return data
 
-
     def fit(self, data):
 
         data = self.fit_transform_data(data)
         y_type = data['target_type']
-        X = data.drop(columns=['target_grade', 'target_type'])
-        self.X_columns = X.columns
+        X = data[self.X_columns]
         self.type_model.fit(X, y_type) 
         
     def predict_type(self, data):
