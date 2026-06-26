@@ -1,6 +1,10 @@
 import streamlit as st
+from model_final import Trajectory
+import pandas as pd
 
 st.set_page_config(page_title="Оценка траектории обучения", layout="centered")
+model = Trajectory.load("trajectory_model.pkl")
+    
 
 if "step" not in st.session_state:
     st.session_state.step = 1
@@ -248,11 +252,33 @@ if st.session_state.step == 2:
         predict_button=st.button("Получить прогноз", type="primary")
 
     if predict_button:
-        # здесь подключаем модель и выводим реальные данные
-        predicted_grade = 8.4
-        predicted_type = "Первая сдача"
+
+        input_data = pd.DataFrame([{
+            "program": program,
+            "education_level": education_level,
+            "academic_year": 2024,                # константа, надо добавить
+            "place_type": place_type,
+            "course": int(course),
+            "absence_status": "valid",            # константа, надо добавить
+
+            "discipline": discipline,
+            "module": int(module_1),
+            "exam_type": attempt_1,
+            "grade_10": grade_1,
+            "difficulty_avg_score": difficulty_1,
+
+            "exam_type_prev": attempt_2, 
+            "grade_prev": grade_2, 
+            "difficulty_prev": difficulty_2,
+
+            # Пока константы, тоже надо добавить
+            "avg_grade_prev": 7.5,
+            "min_prev": 3,
+            "max_prev": 10
+        }])
+        pred_grade, pred_type = model.predict(input_data, fillna=False)
         st.success("Модель рассчитала прогноз")
 
-        st.metric("Предсказанная оценка", f"{predicted_grade}/10")
-        st.caption(f"С какой попытки: {predicted_type}")
+        st.metric("Предсказанная оценка", f"{pred_grade[0]}/10")
+        st.caption(f"С какой попытки: {pred_type[0]}")
     
