@@ -48,11 +48,11 @@ class Trajectory:
         return grades_pred, type_pred 
 
     def analysis(self, y_true_grade, y_pred_grade, y_true_type, y_pred_type):
-        model_analysis(y_true_grade, y_pred_grade, y_true_type, y_pred_type)
+        return model_analysis(y_true_grade, y_pred_grade, y_true_type, y_pred_type)
 
 
     def visualize(self, grades_pred, type_pred):
-        model_visualization(grades_pred, type_pred)
+        return model_visualization(grades_pred, type_pred)
 
     def discipline_check(self, data, discipline_name):
         discipline_analysis(data, discipline_name)

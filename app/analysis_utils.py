@@ -35,7 +35,7 @@ def model_analysis(y_true_grade, y_pred_grade, y_true_type, y_pred_type):
         axs[1][1].set_ylabel('frequency')
 
         plt.tight_layout()
-        plt.show()
+        return fig
 
     
 def model_visualization(grades_pred, type_pred):
@@ -53,6 +53,7 @@ def model_visualization(grades_pred, type_pred):
         plt.setp(axs[1].get_xticklabels(), fontsize=8)
         axs[1].figure.tight_layout()
 
+        return fig
 
 
 def discipline_analysis(data, discipline_name):

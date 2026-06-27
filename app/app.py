@@ -1,6 +1,7 @@
 import streamlit as st
 from model_final import Trajectory
 from disciplines import DISCIPLINES
+from data_utils import prepare_data
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -160,13 +161,18 @@ if st.session_state.step == 1:
         st.rerun()
 
 
-
 if st.session_state.step == 2:
-    FEATURES = ['program', 'education_level', 'place_type', 'course', 'absence_status', 'discipline', 'module',
-                'exam_type', 'grade_10', 'difficulty_avg_score', 'exam_type_prev', 'grade_prev', 'difficulty_prev',
-                'avg_grade_prev', 'min_prev', 'max_prev']
+    df = st.session_state.student_data.copy()
+    df.rename(columns={'difficulty': 'difficulty_avg_score'}, inplace=True)
+    input_data = prepare_data(df)
 
+    pred_grade, pred_type = model.predict(input_data, fillna=False)
 
+    p = len([grade for grade in pred_grade if grade >= 4]) / len(pred_grade)
+    st.markdown(f'Процент успешной сдачи: {p}')
+
+    fig = model.visualize(pred_grade, pred_type)
+    st.pyplot(fig, width='content')
 
 
 if st.session_state.step == 3:
