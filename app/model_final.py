@@ -5,10 +5,10 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from catboost import CatBoostRegressor, Pool
-from model.data_utils import fillna_data
+from data_utils import fillna_data
 from utils.analysis_utils import model_analysis, model_visualization, discipline_analysis
-from model.transform_utils import LightGBM_model
-from model.params import FEATURES, CATBOOST_HYPERPARAMETRS, LIGHTGBM_HYPERPARAMETRS
+from transform_utils import LightGBM_model
+from params import FEATURES, CATBOOST_HYPERPARAMETRS, LIGHTGBM_HYPERPARAMETRS
 
 class Trajectory: 
     def __init__(self):

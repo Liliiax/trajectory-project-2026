@@ -11,7 +11,7 @@ for warn in [UserWarning, FutureWarning, RuntimeWarning]: warnings.filterwarning
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from model.params import FEATURES
+from params import FEATURES
 
     
 class LightGBM_model: 
