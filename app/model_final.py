@@ -1,14 +1,14 @@
 import numpy as np
-import pandas as pd
-from catboost import CatBoostRegressor, Pool
-from data_utils import fillna_data
-from analysis_utils import model_analysis, model_visualization, discipline_analysis
 import joblib
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
-from transform_utils import LightGBM_model
-from sklearn.metrics import mean_absolute_error, f1_score
-from params import FEATURES, CATBOOST_HYPERPARAMETRS, LIGHTGBM_HYPERPARAMETRS
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from catboost import CatBoostRegressor, Pool
+from model.data_utils import fillna_data
+from utils.analysis_utils import model_analysis, model_visualization, discipline_analysis
+from model.transform_utils import LightGBM_model
+from model.params import FEATURES, CATBOOST_HYPERPARAMETRS, LIGHTGBM_HYPERPARAMETRS
 
 class Trajectory: 
     def __init__(self):

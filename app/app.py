@@ -1,12 +1,12 @@
 import streamlit as st
+import os
 from model_final import Trajectory
 from disciplines import DISCIPLINES
-from params import RENAME_COLUMNS, INV_RENAME_COLUMNS
+from columns import RENAME_COLUMNS, INV_RENAME_COLUMNS
 from data_utils import prepare_data
 from datetime import datetime
 import pandas as pd
 import numpy as np
-import os
 
 # текущий год
 current_year = datetime.now().year
@@ -14,9 +14,9 @@ current_year = datetime.now().year
 # текущая директория
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-model_path = os.path.join(current_dir, "trajectory_model.pkl")
-logo_path = os.path.join(current_dir, "hse_logo.png")
-model_output_path =  os.path.join(current_dir, "model_output.png")
+model_path = os.path.join(current_dir, "../model/trajectory_model.pkl")
+logo_path = os.path.join(current_dir, "img/hse_logo.png")
+model_output_path =  os.path.join(current_dir, "img/model_output.png")
 
 model = Trajectory.load(model_path)
 st.set_page_config(page_title="Оценка траектории обучения", layout="centered")
@@ -138,7 +138,7 @@ if st.session_state.step == 1:
             <li><b>Учебный год</b></li>
             <li><b>Тип места</b> — бюджетное / коммерческое / целевое или др.</li>
             <li><b>Номер курса</b> — 1–4 (бакалавриат) или 1–2 (магистратура)</li>
-            <li><b>Дисциплина</b> — название предмета, по которому делается прогноз</li>
+            <li><b>Дисциплина</b> — название предмета</li>
             <li><b>Модуль</b> — от 1 до 4</li>
             <li><b>Тип сдачи</b> — первая сдача / пересдача / пересдача с комиссией/ пересдача по уважительной причине</li>
             <li><b>Оценка</b> — оценка за указанный модуль от 0 до 10</li>
@@ -191,19 +191,26 @@ if st.session_state.step == 2:
 
     # подготовка данных для модели
     df.rename(columns=RENAME_COLUMNS, inplace=True)
+    df['absence_status'] = df['absence_status'].replace({
+            'Уважительная': 'valid',
+            'Неуважительная': 'invalid',
+            'N': '\\N'
+        })
+
+
     data = prepare_data(df)
 
     # предсказания
     with st.spinner("Модель обрабатывает данные..."):
         pred_grade, pred_type = model.predict(data, fillna=True)
 
-    data['predicted_grade'] = pred_grade
+    data['predicted_grade'] = np.round(pred_grade).astype(int)
     data['predicted_attempt'] = pred_type
 
     st.markdown('<div style="padding: 10px 0;"></div>', unsafe_allow_html=True)
     st.markdown("### Основные показатели")
 
-    col1, col2, col3, col4 = st.columns(4, gap='small')
+    col1, col2, col3 = st.columns(3, gap='small')
 
     with col1:
         success_rate = len([g for g in pred_grade if g >= 4]) / len(pred_grade) * 100
@@ -223,15 +230,6 @@ if st.session_state.step == 2:
         )
 
     with col3:
-        first_attempt = len([t for t in pred_type if t == "Первая сдача"])
-        first_attempt_pct = first_attempt / len(pred_type) * 100
-        st.metric(
-            "Первая сдача",
-            f"{first_attempt_pct:.1f}%",
-            delta=f"{first_attempt_pct - 50:.1f}%" if first_attempt_pct != 0 else None
-        )
-
-    with col4:
         min_grade = np.min(pred_grade)
         max_grade = np.max(pred_grade)
         st.metric(

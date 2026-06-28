@@ -8,7 +8,11 @@ from sklearn.preprocessing import LabelEncoder, OrdinalEncoder, TargetEncoder, O
 import warnings
 from sklearn.metrics import f1_score
 for warn in [UserWarning, FutureWarning, RuntimeWarning]: warnings.filterwarnings("ignore", category = warn)
-from params import FEATURES
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from model.params import FEATURES
+
     
 class LightGBM_model: 
     

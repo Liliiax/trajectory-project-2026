@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
-from params import FEATURES
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from model.params import FEATURES
 
 
 def fillna_data(data):
