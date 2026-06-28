@@ -1,6 +1,7 @@
 import streamlit as st
 from model_final import Trajectory
 from disciplines import DISCIPLINES
+from params import RENAME_COLUMNS, INV_RENAME_COLUMNS
 from data_utils import prepare_data
 from datetime import datetime
 import pandas as pd
@@ -17,9 +18,8 @@ model_path = os.path.join(current_dir, "trajectory_model.pkl")
 logo_path = os.path.join(current_dir, "hse_logo.png")
 model_output_path =  os.path.join(current_dir, "model_output.png")
 
-
-st.set_page_config(page_title="Оценка траектории обучения", layout="centered")
 model = Trajectory.load(model_path)
+st.set_page_config(page_title="Оценка траектории обучения", layout="centered")
 
 # инициализация session_state
 if "step" not in st.session_state:
@@ -55,12 +55,31 @@ header { visibility: hidden; }
 </style>""", unsafe_allow_html=True)
 
 
+# лого и название
 col1, col2, col3 = st.columns([2, 1, 2])
-with col2: st.image(logo_path, width=1990)
-st.title("Оценка траектории обучения")
+with col2:
+    st.image(logo_path, width=1800)
+
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<h1 style='text-align: center; color: #1F1F1F; font-size: 32px; font-weight: 600; margin-top: -30px;'>
+    Оценка траектории обучения
+</h1>
+""", unsafe_allow_html=True)
+
+st.markdown('<div style="padding: -20px 0;"></div>', unsafe_allow_html=True)
 st.markdown("---")
 
 
+# приветственная страница
 if st.session_state.step == 1:
     st.markdown("""
     <p style='font-size: 16px; font-weight: 500; margin-top: 0;'>
@@ -85,7 +104,7 @@ if st.session_state.step == 1:
         <ul style='margin: 6px 0 0 0; padding-left: 20px; font-size: 14px; color: #444;'>
             <li>Персональный прогноз (оценка + попытка)</li>
             <li>Групповая статистика: гистограммы оценок, соотношение попыток</li>
-            <li>Список студентов с низким прогнозом</li>
+            <li>Результаты в формате csv</li>
         </ul>
     </div>
     
@@ -110,28 +129,30 @@ if st.session_state.step == 1:
     st.markdown("""
     <div style='background: #f8f9fa; padding: 16px 20px; border-radius: 10px; margin: 10px 0; border: 1px solid #e0e0e0;'>
         <p style='font-weight: 400; font-size: 13px; margin: 0 0 10px 0; color: #666;'>
-            Требуемые входные данные:
+            Требуемые входные данные (обязательно с такими названиями колонок):
         </p>
         <ul style='margin: 0; padding-left: 20px; font-size: 14px; color: #444; line-height: 1.8;'>
-            <li><b>ID студента</b> — идентификатор студента</li>
+            <li><b>ID</b> — идентификатор студента</li>
             <li><b>Образовательная программа</b> — название программы обучения</li>
             <li><b>Уровень образования</b> — бакалавриат / магистратура</li>
+            <li><b>Учебный год</b></li>
             <li><b>Тип места</b> — бюджетное / коммерческое / целевое или др.</li>
             <li><b>Номер курса</b> — 1–4 (бакалавриат) или 1–2 (магистратура)</li>
-            <li><b>Название дисциплины</b> — предмет, по которому делается прогноз</li>
-            <li><b>Номер модуля</b> — от 1 до 4</li>
-            <li><b>Оценка за модуль</b> — от 0 до 10</li>
+            <li><b>Дисциплина</b> — название предмета, по которому делается прогноз</li>
+            <li><b>Модуль</b> — от 1 до 4</li>
             <li><b>Тип сдачи</b> — первая сдача / пересдача / пересдача с комиссией/ пересдача по уважительной причине</li>
+            <li><b>Оценка</b> — оценка за указанный модуль от 0 до 10</li>
             <li><b>Причина отсутствия</b> — уважительная / неуважительная / N (в случае присутствия на экзамене)</li>
-            <li><b>Оценка сложности</b> — от 0 до 5 (насколько сложным был предмет для студента)</li>
+            <li><b>Сложность</b> — оценка от 0 до 5 (насколько сложным был предмет для студента)</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
-        label="Загрузите нужный файл",
+        label="Загрузить",
         type=['csv'],
-        key="csv_uploader"
+        key="csv_uploader",
+        label_visibility='hidden'
     )
 
     if uploaded_file is not None:
@@ -149,6 +170,7 @@ if st.session_state.step == 1:
             st.error(f"Ошибка при чтении файла: {e}")
 
     # ввод данных вручную
+    st.markdown('<div style="padding: 10px 0;"></div>', unsafe_allow_html=True)
     st.markdown("""
     <p style='text-align: left; font-size: 16px; color: #666;'>
     Ввести данные вручную
@@ -161,20 +183,121 @@ if st.session_state.step == 1:
         st.rerun()
 
 
+# в случае загрузки готового csv-файла
 if st.session_state.step == 2:
     df = st.session_state.student_data.copy()
-    df.rename(columns={'difficulty': 'difficulty_avg_score'}, inplace=True)
-    input_data = prepare_data(df)
+    st.info(f"Данные загружены: {len(df)} записей, {df['ID'].nunique()} студентов")
+    st.dataframe(df.head())
 
-    pred_grade, pred_type = model.predict(input_data, fillna=False)
+    # подготовка данных для модели
+    df.rename(columns=RENAME_COLUMNS, inplace=True)
+    data = prepare_data(df)
 
-    p = len([grade for grade in pred_grade if grade >= 4]) / len(pred_grade)
-    st.markdown(f'Процент успешной сдачи: {p}')
+    # предсказания
+    with st.spinner("Модель обрабатывает данные..."):
+        pred_grade, pred_type = model.predict(data, fillna=True)
+
+    data['predicted_grade'] = pred_grade
+    data['predicted_attempt'] = pred_type
+
+    st.markdown('<div style="padding: 10px 0;"></div>', unsafe_allow_html=True)
+    st.markdown("### Основные показатели")
+
+    col1, col2, col3, col4 = st.columns(4, gap='small')
+
+    with col1:
+        success_rate = len([g for g in pred_grade if g >= 4]) / len(pred_grade) * 100
+        st.metric(
+            "Успешная сдача",
+            f"{success_rate:.1f}%",
+            delta=f"{success_rate - 50:.1f}%" if success_rate != 0 else None,
+            delta_color="normal"
+        )
+
+    with col2:
+        avg_grade = np.mean(pred_grade)
+        st.metric(
+            "Средняя оценка по группе",
+            f"{avg_grade:.1f} / 10",
+            delta=f"{avg_grade - 5:.1f}" if avg_grade != 0 else None
+        )
+
+    with col3:
+        first_attempt = len([t for t in pred_type if t == "Первая сдача"])
+        first_attempt_pct = first_attempt / len(pred_type) * 100
+        st.metric(
+            "Первая сдача",
+            f"{first_attempt_pct:.1f}%",
+            delta=f"{first_attempt_pct - 50:.1f}%" if first_attempt_pct != 0 else None
+        )
+
+    with col4:
+        min_grade = np.min(pred_grade)
+        max_grade = np.max(pred_grade)
+        st.metric(
+            "Диапазон оценок",
+            f"{min_grade:.0f} – {max_grade:.0f}"
+        )
+
+    st.markdown('<div style="padding: 10px 0;"></div>', unsafe_allow_html=True)
+    st.markdown("### Визуализация результатов")
 
     fig = model.visualize(pred_grade, pred_type)
-    st.pyplot(fig, width='content')
+    st.pyplot(fig)
+
+    # таблица с результатами
+    with st.expander("Подробные результаты по студентам", expanded=False):
+        cols = ['student_id', 'discipline', 'grade_10', 'exam_type', 'predicted_grade', 'predicted_attempt']
+
+        data['status'] = data['predicted_grade'].apply(
+            lambda x: 'Успешно' if x >= 4 else 'Неуспешно'
+        )
+        results = data[cols + ['status']].copy()
+        results.rename(columns=INV_RENAME_COLUMNS, inplace=True)
+
+        st.dataframe(
+            results.style.background_gradient(
+                subset=['Следующая оценка'],
+                cmap='RdYlGn',
+                vmin=0,
+                vmax=10
+            ),
+            height=400
+        )
+
+    low_grades = data[data['predicted_grade'] < 4]
+    if len(low_grades) > 0:
+        st.warning(f"Количество студентов в группе риска: {len(low_grades)}")
+    else:
+        st.success("Все студенты имеют прогноз выше 4")
 
 
+    st.markdown('<div style="padding: 10px 0;"></div>', unsafe_allow_html=True)
+    st.markdown("### Экспорт результатов")
+
+
+    col1, col2 = st.columns([3, 5])
+    with col1:
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="Скачать результаты в CSV",
+            data=csv,
+            file_name="predictions_results.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+
+
+    st.markdown("---")
+
+    col_1, col_2 = st.columns([8, 1])
+    with col_2:
+        if st.button("←", key="back_arrow"):
+            st.session_state.step = 1
+            st.rerun()
+
+
+# в случае ручного ввода данных
 if st.session_state.step == 3:
     st.subheader("Введите данные")
     col1, col2 = st.columns(2)
@@ -226,6 +349,13 @@ if st.session_state.step == 3:
             st.session_state.education_level = education_level
             st.rerun()
 
+    st.markdown("---")
+
+    col1, col2 = st.columns([8, 1])
+    with col2:
+        if st.button("←", key="back_arrow"):
+            st.session_state.step = 1
+            st.rerun()
 
 
 if st.session_state.step == 4:
@@ -238,7 +368,7 @@ if st.session_state.step == 4:
         """, unsafe_allow_html=True)
 
     def render_module(module_id, is_first=False):
-        col1, col2 = st.columns([4, 1])
+        col1, col2 = st.columns([5, 1])
 
         with col1:
             if is_first:
@@ -316,7 +446,7 @@ if st.session_state.step == 4:
 
         with col2:
             if not is_first:
-                if st.button("Удалить", key=f'remove_{module_id}'):
+                if st.button("×", key=f'remove_{module_id}'):
                     st.session_state.data.pop(module_id - 1)
                     for j, m in enumerate(st.session_state.data, 1):
                         m["id"] = j
@@ -339,7 +469,7 @@ if st.session_state.step == 4:
         )
 
     if len(st.session_state.data) < 3:
-        if st.button("+ Добавить еще один модуль"):
+        if st.button("+ (добавить еще один модуль)"):
             new_id = len(st.session_state.data) + 1
             st.session_state.data.append({
                 "id": new_id,
@@ -355,10 +485,6 @@ if st.session_state.step == 4:
     else:
         st.info("Максимальное количество модулей добавлено")
 
-
-    if st.button("Назад"):
-        st.session_state.step = 3
-        st.rerun()
 
     predict_button = st.button("Получить прогноз", type="primary")
 
@@ -420,3 +546,11 @@ if st.session_state.step == 4:
                 st.metric("Предсказанная оценка", f"{int(pred_grade[0])} / 10")
             with col2:
                 st.metric("Попытка сдачи", pred_type[0])
+
+    st.markdown("---")
+
+    col1, col2 = st.columns([8, 1])
+    with col2:
+        if st.button("←", key="back_arrow"):
+            st.session_state.step = 3
+            st.rerun()

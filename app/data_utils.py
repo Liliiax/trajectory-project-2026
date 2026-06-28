@@ -33,33 +33,33 @@ def fillna_data(data):
 def prepare_data(data):
         data['grade_10'] = pd.to_numeric(data['grade_10'], errors='coerce')
         data['exam_type'] = pd.Categorical(data['exam_type'],
-                                         categories=['Первая сдача', 'Пересдача по уважительной причине', 'Пересдача',
-                                                     'Пересдача с комиссией'], ordered=True)
+                                           categories=['Первая сдача', 'Пересдача по уважительной причине', 'Пересдача',
+                                                       'Пересдача с комиссией'], ordered=True)
 
         df = data.sort_values(['student_id', 'academic_year', 'module', 'exam_type', 'discipline']).reset_index(drop=True)
-        g_student = df.groupby('student_id')
         g_subject = df.groupby(['student_id', 'discipline'])
 
         df['grade_prev'] = g_subject['grade_10'].shift(1)
         df['difficulty_prev'] = g_subject['difficulty_avg_score'].shift(1)
         df['exam_type_prev'] = g_subject['exam_type'].shift(1)
-        df['cnt_prev'] = g_student.cumcount()
-        df['sum_prev'] = g_student['grade_10'].transform(lambda x: x.shift().cumsum())
-        df['min_prev'] = g_student['grade_10'].transform(lambda x: x.shift().cummin())
-        df['max_prev'] = g_student['grade_10'].transform(lambda x: x.shift().cummax())
+        df['cnt_prev'] = g_subject.cumcount()
+        df['sum_prev'] = g_subject['grade_10'].transform(lambda x: x.shift().cumsum())
+        df['min_prev'] = g_subject['grade_10'].transform(lambda x: x.shift().cummin())
+        df['max_prev'] = g_subject['grade_10'].transform(lambda x: x.shift().cummax())
         df['avg_grade_prev'] = df['sum_prev'] / df['cnt_prev']
 
-        student_avg_grade = df.groupby('student_id')['grade_10'].mean()
+        student_subject_avg_difficulty = df.groupby(['student_id', 'discipline'])['difficulty_avg_score'].mean()
 
         def fill_missing(row):
                 if row['cnt_prev'] == 0:
-                        avg = student_avg_grade.get(row['student_id'], df['grade_10'].mean())
+                        avg_difficulty = student_subject_avg_difficulty.get((row['student_id'], row['discipline']), df['difficulty_avg_score'].mean())
                         return pd.Series({
-                                'grade_prev': avg,
-                                'exam_type_prev': 'Первая сдача',
-                                'min_prev': avg,
-                                'max_prev': avg,
-                                'avg_grade_prev': avg
+                                'grade_prev': row['grade_10'],
+                                'difficulty_prev': avg_difficulty,
+                                'exam_type_prev': row['exam_type'],
+                                'min_prev': row['grade_10'],
+                                'max_prev': row['grade_10'],
+                                'avg_grade_prev': row['grade_10']
                         })
                 return pd.Series({
                         'grade_prev': row['grade_prev'],
@@ -71,9 +71,15 @@ def prepare_data(data):
 
         filled = df.apply(fill_missing, axis=1)
         df['grade_prev'] = filled['grade_prev']
+        df['difficulty_prev'] = filled['difficulty_prev']
         df['exam_type_prev'] = filled['exam_type_prev']
         df['min_prev'] = filled['min_prev']
         df['max_prev'] = filled['max_prev']
         df['avg_grade_prev'] = filled['avg_grade_prev']
 
-        return df[FEATURES]
+        # оставляем только последнюю запись для каждого студента по каждому предмету
+        # это будет их следующая сдача
+        df = df.sort_values(['student_id', 'discipline', 'academic_year', 'module']).reset_index(drop=True)
+        df = df.groupby(['student_id', 'discipline']).last().reset_index()
+
+        return df[['student_id'] + FEATURES]

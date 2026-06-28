@@ -4,3 +4,11 @@ LIGHTGBM_HYPERPARAMETRS = {'learning_rate': 0.05593308405682298, 'num_leaves': 4
 FEATURES = ['program', 'education_level', 'place_type', 'course', 'absence_status', 'discipline', 'module',
        'exam_type', 'grade_10', 'difficulty_avg_score', 'exam_type_prev', 'grade_prev', 'difficulty_prev',
        'avg_grade_prev', 'min_prev', 'max_prev']
+
+RENAME_COLUMNS = {'ID': 'student_id', 'Образовательная программа': 'program', 'Уровень образования': 'education_level',
+                    'Учебный год': 'academic_year', 'Тип места': 'place_type', 'Номер курса': 'course', 'Дисциплина': 'discipline',
+                    'Модуль': 'module', 'Оценка': 'grade_10', 'Тип сдачи': 'exam_type', 'Причина отсутствия': 'absence_status',
+                    'Сложность': 'difficulty_avg_score'}
+
+INV_RENAME_COLUMNS = {'student_id': 'ID', 'discipline': 'Дисциплина', 'grade_10': 'Последняя оценка', 'exam_type': 'Последняя сдача',
+                      'predicted_grade': 'Следующая оценка', 'predicted_attempt': 'Следующая попытка', 'status': 'Статус'}
