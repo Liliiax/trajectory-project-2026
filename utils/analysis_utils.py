@@ -39,17 +39,18 @@ def model_analysis(y_true_grade, y_pred_grade, y_true_type, y_pred_type):
 
     
 def model_visualization(grades_pred, type_pred):
-        fig, axs = plt.subplots(1, 2, figsize=(18, 5))
+        fig, axs = plt.subplots(1, 2, figsize=(15, 5))
         
         grades_0 = [grade for grade in grades_pred if grade < 4]
         grades_1 = [grade for grade in grades_pred if grade >= 4]
 
-        axs[0].hist(grades_1, bins=10,  color='mediumaquamarine', label=f'Успешная сдача: {len(grades_1)}')
-        axs[0].hist(grades_0, bins=10, color='lightcoral', label=f'Неуспешная сдача: {len(grades_0)}')
+        axs[0].hist(grades_1,  color='mediumaquamarine', label=f'Успешная сдача: {len(grades_1)}')
+        axs[0].hist(grades_0, color='lightcoral', label=f'Неуспешная сдача: {len(grades_0)}')
         axs[0].set_xticks(np.arange(0, 11))
         axs[0].legend()
+        axs[0].figure.tight_layout()
 
-        axs[1].hist(type_pred, bins=10, color='cornflowerblue')
+        axs[1].hist(type_pred, color='cornflowerblue')
         plt.setp(axs[1].get_xticklabels(), fontsize=8)
         axs[1].figure.tight_layout()
 
