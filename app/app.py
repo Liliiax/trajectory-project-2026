@@ -276,7 +276,7 @@ if st.session_state.step == 2:
 
     col1, col2 = st.columns([3, 5])
     with col1:
-        csv = df.to_csv(index=False).encode('utf-8')
+        csv = results.to_csv(index=False).encode('utf-8')
         st.download_button(
             label="Скачать результаты в CSV",
             data=csv,
