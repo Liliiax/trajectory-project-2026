@@ -1,6 +1,9 @@
 import sys
 import os
 from pathlib import Path
+
+sys.path.append(str(Path(__file__).parent.parent))
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,8 +12,6 @@ from trajectory_model import Trajectory
 from disciplines import DISCIPLINES
 from src.data_utils import prepare_data
 from columns import *
-
-sys.path.append(str(Path(__file__).parent.parent))
 
 # текущий год
 current_year = datetime.now().year
