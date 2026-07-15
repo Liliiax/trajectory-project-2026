@@ -1,14 +1,10 @@
 import numpy as np
 import joblib
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from catboost import CatBoostRegressor, Pool
-from data_utils import fillna_data
-from utils.analysis_utils import model_analysis, model_visualization, discipline_analysis
-from transform_utils import LightGBM_model
-from params import FEATURES, CATBOOST_HYPERPARAMETRS, LIGHTGBM_HYPERPARAMETRS
+from models.lightgbm_model import LightGBM_model
+from src.data_utils import fillna_data
+from src.analysis_utils import model_analysis, model_visualization, discipline_analysis
+from src.params import *
 
 class Trajectory: 
     def __init__(self):
@@ -63,6 +59,3 @@ class Trajectory:
     @staticmethod
     def load(path):
         return joblib.load(path)
-    
-
-    

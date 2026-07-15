@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a41920a1-13bf-4bad-a153-aed9b54163bd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/catboost_info/catboost_training.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/catboost_info/learn/events.out.tfevents" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/catboost_info/learn_error.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/catboost_info/time_left.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/trajectory_model.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/trajectory_model.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/data_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/data_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/disciplines.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/disciplines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/img/hse_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/imgs/hse_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/img/model_output.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/imgs/model_output.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/model_final.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/trajectory_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/params.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/params.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/transform_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/lightgbm_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/feature_importance_grade.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/feature_importance_grade.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/feature_importance_mean.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/feature_importance_mean.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/features_for_type.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/data/features_for_type.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/fillna_data.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/data/fillna_data.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/preparing1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/data/preparing1.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/preparing2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/data/preparing2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/total_laggs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/total_laggs.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-preparing/total_less_laggs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/total_less_laggs.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DecisionTree-vs-CatBoost.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/models/DecisionTree-vs-CatBoost.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/LightGBM-vs-RandomForest.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/models/LightGBM-vs-RandomForest.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/trajectory_model.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/trajectory_model.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/analysis_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/analysis_utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="3GXMze8TkHl54SljG8a4ivw6b0D" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/alinatomilova/trajectory-proj&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-0e3be3396995-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23339.19" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a41920a1-13bf-4bad-a153-aed9b54163bd" name="Changes" comment="" />
+      <created>1784113723400</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784113723400</updated>
+    </task>
+    <servers />
+  </component>
+</project>

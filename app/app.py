@@ -1,22 +1,25 @@
-import streamlit as st
+import sys
 import os
-from model_final import Trajectory
-from disciplines import DISCIPLINES
-from columns import RENAME_COLUMNS, INV_RENAME_COLUMNS
-from data_utils import prepare_data
-from datetime import datetime
+from pathlib import Path
+import streamlit as st
 import pandas as pd
 import numpy as np
+from datetime import datetime
+from trajectory_model import Trajectory
+from disciplines import DISCIPLINES
+from src.data_utils import prepare_data
+from columns import *
+
+sys.path.append(str(Path(__file__).parent.parent))
 
 # текущий год
 current_year = datetime.now().year
-
 # текущая директория
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-model_path = os.path.join(current_dir, "../model/trajectory_model.pkl")
-logo_path = os.path.join(current_dir, "img/hse_logo.png")
-model_output_path =  os.path.join(current_dir, "img/model_output.png")
+model_path = os.path.join(current_dir, "../models/trajectory_model.pkl")
+logo_path = os.path.join(current_dir, "imgs/hse_logo.png")
+model_output_path =  os.path.join(current_dir, "imgs/model_output.png")
 
 model = Trajectory.load(model_path)
 st.set_page_config(page_title="Оценка траектории обучения", layout="centered")

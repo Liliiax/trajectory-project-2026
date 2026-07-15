@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from params import FEATURES
+from src.params import FEATURES
 
 
 def fillna_data(data):

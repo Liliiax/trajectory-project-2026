@@ -1,17 +1,9 @@
 import numpy as np
 import pandas as pd
-import joblib
 import lightgbm as lgb
 from lightgbm import LGBMClassifier
-from sklearn.metrics import mean_absolute_error, accuracy_score
-from sklearn.preprocessing import LabelEncoder, OrdinalEncoder, TargetEncoder, OrdinalEncoder
-import warnings
-from sklearn.metrics import f1_score
-for warn in [UserWarning, FutureWarning, RuntimeWarning]: warnings.filterwarnings("ignore", category = warn)
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from params import FEATURES
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder, TargetEncoder
+from src.params import FEATURES
 
     
 class LightGBM_model: 
@@ -95,10 +87,9 @@ class LightGBM_model:
         classes = self.exam_encoder.inverse_transform(self.type_model.classes_.astype(int))
 
         return pd.DataFrame(pred, columns=classes)
+    
     @property 
     def feature_importances_(self): 
         imp_sum = np.sum(self.type_model.feature_importances_) 
          
         return 100 * self.type_model.feature_importances_ / imp_sum
-   
-
